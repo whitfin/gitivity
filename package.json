@@ -27,7 +27,7 @@
     "gitivity": "bin/gitivity"
   },
   "scripts": {
-    "lint": "eslint bin/*.js src/*.js"
+    "lint": "./node_modules/.bin/eslint bin/*.js src/*.js"
   },
   "dependencies": {
     "@gitbeaker/rest": "^39.21.2",

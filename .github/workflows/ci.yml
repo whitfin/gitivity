@@ -23,7 +23,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node }}
-    - run: npm ci
     - run: npm run build --if-present
     - run: npm test --if-present
     - run: npm run lint --if-present

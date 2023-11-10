@@ -1,0 +1,37 @@
+{
+  "name": "gitivity",
+  "version": "1.0.0",
+  "description": "A dumb utility to help you mirror your GitLab and GitHub contributions.",
+  "author": {
+    "name": "Isaac Whitfield",
+    "email": "iw@whitfin.io"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/whitfin/gitivity.git"
+  },
+  "bugs": {
+    "email": "iw@whitfin.io",
+    "url": "http://github.com/whitfin/gitivity/issues"
+  },
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "preferGlobal": true,
+  "keywords": [
+    "github",
+    "gitlab",
+    "activity",
+    "contributions"
+  ],
+  "bin": {
+    "gitivity": "bin/gitivity"
+  },
+  "dependencies": {
+    "@gitbeaker/rest": "^39.21.2",
+    "@octokit/rest": "^20.0.2",
+    "mkdirp": "^3.0.1",
+    "moment": "^2.29.4",
+    "simple-git": "^3.20.0",
+    "yargs": "^17.7.2"
+  }
+}

@@ -26,6 +26,9 @@
   "bin": {
     "gitivity": "bin/gitivity"
   },
+  "scripts": {
+    "lint": "eslint bin/*.js src/*.js"
+  },
   "dependencies": {
     "@gitbeaker/rest": "^39.21.2",
     "@octokit/rest": "^20.0.2",
@@ -33,5 +36,19 @@
     "moment": "^2.29.4",
     "simple-git": "^3.20.0",
     "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.53.0"
+  },
+  "eslintConfig": {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "env": {
+      "es6": true,
+      "node": true
+    }
   }
 }

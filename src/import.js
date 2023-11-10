@@ -39,7 +39,7 @@ module.exports = {
             for (let commit of logged.all) {
                 known.add(commit.message.split(' ').pop());
             }
-        } catch {
+        } catch          {
             // no commits yet
         }
 
@@ -73,4 +73,4 @@ module.exports = {
             ]);
         }
     }
-}
+};

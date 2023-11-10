@@ -41,14 +41,14 @@ module.exports = {
         // sort commits by timestamp
         commits.sort(function (left, right) {
             return left.timestamp.valueOf() - right.timestamp.valueOf();
-        })
+        });
 
         // write all to stdout
         for (let commit of commits) {
             console.log(JSON.stringify(commit));
         }
     }
-}
+};
 
 /**
  * Export commit activity from GitLab.

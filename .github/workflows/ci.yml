@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: Node.js ${{ matrix.node }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - macox-latest
+          - ubuntu-latest
+          - windows-latest
+        node:
+          - 20.x
+    steps:
+    - uses: actions/checkout@v2
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test --if-present
+    - run: npm run lint --if-present

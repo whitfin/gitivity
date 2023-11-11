@@ -32,14 +32,17 @@ module.exports = {
         let git = Git();
         await git.init(false, ['-b', args.branch]);
 
+        // duplicate filter
         let known = new Set();
         try {
+            // fetch the entire git log
             let logged = await git.log();
 
-            for (let commit of logged.all) {
-                known.add(commit.message.split(' ').pop());
+            // collect all known actions by type
+            for (let action of logged.all) {
+                known.add(action.message);
             }
-        } catch          {
+        } catch {
             // no commits yet
         }
 
@@ -50,24 +53,24 @@ module.exports = {
         });
 
         // process each line of input
-        for await (const line of stream) {
+        for await (let line of stream) {
             // pull author and commit char
-            let commit = JSON.parse(line);
-            let author = args.author || commit.author;
+            let action = JSON.parse(line);
+            let author = args.author || action.author;
 
-            // skip commits in the log
-            if (known.has(commit.id)) {
+            // skip any actions tracked in the log
+            if (known.has(action.id)) {
                 continue;
             }
 
             // usually redundant
-            known.add(commit.id);
+            known.add(action.id);
 
-            // commit the file, putting the id in the message
-            await git.commit(`Adding commit for ${commit.id}`, [
+            // make a commit using the id
+            await git.commit(`${action.id}`, [
                 '--allow-empty',
                 '--date',
-                commit.timestamp,
+                action.timestamp,
                 '--author',
                 author
             ]);

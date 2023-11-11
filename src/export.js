@@ -6,15 +6,15 @@ const Octokit = require('@octokit/rest').Octokit;
 module.exports = {
 
     // command usage text
-    command: ['export <source> <token>'],
+    command: ['export <service> <token>'],
 
     // command description text for the CLI
-    describe: 'Exports a sorted array of commit activity.',
+    describe: 'Exports a sorted array of action activity.',
 
     // command argument builder
     builder: function build(args) {
         return args
-            .positional('source', {
+            .positional('service', {
                 choices: [
                     'github',
                     'gitlab'
@@ -23,91 +23,105 @@ module.exports = {
             .positional('token', {
                 describe: 'The token of the account to authenticate with.'
             })
-            .require('source')
+            .require('service')
             .require('token');
     },
 
     // command handler definition
     handler: async function (args) {
-        // source handlers
-        let sources = {
+        // service handlers
+        let services = {
             github,
             gitlab
         };
 
-        // pull the commits from the source handler
-        let commits = await sources[args.source](args);
+        // pull the actions from the service handler
+        let actions = await services[args.service](args);
 
-        // sort commits by timestamp
-        commits.sort(function (left, right) {
+        // sort actions by timestamp
+        actions.sort(function (left, right) {
             return left.timestamp.valueOf() - right.timestamp.valueOf();
         });
 
         // write all to stdout
-        for (let commit of commits) {
-            console.log(JSON.stringify(commit));
+        for (let action of actions) {
+            console.log(JSON.stringify(action));
         }
     }
 };
 
 /**
- * Export commit activity from GitLab.
+ * Export action activity from GitLab.
  *
  * @param {object} args
  *      the argument passed to the command line.
  * @returns
- *      an array of commits to emit to stdout.
+ *      an array of actions to emit to stdout.
  */
 async function gitlab(args) {
-    let commits = [];
+    let actions = [];
 
     // open Gitlab API cliemt
     let client = new Gitlab({
         token: args.token
     });
 
-    // fetch projects the user contributed to
-    let user = await client.Users.showCurrentUser();
-    let projects = await client.Users.allContributedProjects(user.id);
 
-    // walk through all projects
-    for (let project of projects) {
-        // fetch the authored commits from the current project
-        let entries = await client.Commits.all(project.id, {
-            author: user.name
+    // fetch current user metadata for author tag
+    let user = await client.Users.showCurrentUser();
+    let author = user.name + ' <' + user.email + '>';
+
+    // events we like
+    let enabled = [
+        'closed',
+        'commented',
+        'created',
+        'destroyed',
+        'merged',
+        'pushed',
+        'reopened',
+        'updated'
+    ];
+
+    // walk all enabled types
+    for (let type of enabled) {
+        // walk the events of the user matching the entry type
+        let events = await client.Users.allEvents(user.id, {
+            action: type
         });
 
-        // push the commits to the buffer
-        for (let entry of entries) {
-            let commit = {
-                id: entry.id,
-                author: entry.author_name + ' <' + entry.author_email + '>',
-                timestamp: moment.utc(entry.created_at)
+        // walk all user events
+        for (let event of events) {
+            let action = {
+                id: event.id,
+                author,
+                timestamp: moment.utc(event.created_at)
             };
-            commits.push(commit);
+            actions.push(action);
         }
     }
 
-    // return the shortened commit format
-    return commits;
+    // return the shortened action format
+    return actions;
 }
 
 /**
- * Export commit activity from GitHub.
+ * Export action activity from GitHub.
  *
  * @param {object} args
  *      the argument passed to the command line.
  * @returns
- *      an array of commits to emit to stdout.
+ *      an array of actions to emit to stdout.
  */
 async function github(args) {
-    let commits = [];
+    let actions = [];
 
     // open GitHub API cliemt
     let client = new Octokit({
         auth: args.token
     });
 
+    // retrieve the current user info
     let viewer = await client.graphql(`{
         viewer {
             name
@@ -117,15 +131,18 @@ async function github(args) {
         }
     }`);
 
+    // initialize timestamps
     let user = viewer.viewer;
     let author = `${user.name} <${user.email}>`;
     let created = moment.utc(user.createdAt);
     let current = moment.utc();
 
+    // walk through all actions (yearly)
     while (created.isBefore(current)) {
         let lower = created.toISOString();
         let upper = created.add(1, 'year').toISOString();
 
+        // current year
         let query = `{
             user(login: "${user.login}") {
                 contributionsCollection(from: "${lower}", to: "${upper}") {
@@ -141,25 +158,26 @@ async function github(args) {
             }
         }`;
 
+        // pull back the bucket of weeks to walk
         let result = await client.graphql(query);
         let bucket = result.user.contributionsCollection.contributionCalendar.weeks;
 
+        // flatten into actions
         for (let week of bucket) {
             for (let day of week.contributionDays) {
                 for (let i = 1; i <= day.contributionCount; i++) {
                     let date = moment.utc(day.date);
-                    let commit = {
+                    let action = {
                         id: `${date.valueOf()}${i}`,
                         author,
                         timestamp: date
                     };
-                    commits.push(commit);
+                    actions.push(action);
                 }
             }
         }
     }
 
-
     // done !
-    return commits;
+    return actions;
 }

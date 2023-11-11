@@ -9,9 +9,14 @@ activity from one to the other. It is extremely basic, but will serve the purpos
 users. Right now it only supports GitHub and GitLab, on the public endpoints. If there's
 any interest I might add support for Enterprise versions, or other APIs (Bitbucket, etc).
 
+This tool will attempt to replicate "activity" as defined by each service, in order to
+make charts match across services. This may not always be possible, so don't expect to see
+identical charts - but they should generally be pretty close. Please also keep in mind that
+their definitions of activity can change at any point, but I'll do my best to keep up!
+
 ## How It Works
 
-The idea here is pretty simple. You first export your data from a source (e.g. GitLab)
+The idea here is pretty simple. You first export your commit data from a service (e.g. GitLab)
 and then import it into a repository locally. For each exported commit, a new empty
 commit will be generated with a matching timestamp and author.
 
@@ -31,7 +36,7 @@ You can install `gitivity` from either this repository, or from `npm`.
 Using `gitivity` from the CLI is simple:
 
 ```
-gitivity export <source> <token>
+gitivity export <service> <token>
 gitivity import <target>
 ```
 
@@ -49,6 +54,6 @@ and use it as a remote, which should mirror the activity to your profile.
 
 ## Help & Issues
 
-Feel free to file issues if you need help and/or have suggestions! Although this is a
-tool primarily designed for my own use I'm happy to hear and consider feedback, however
-I'll likely try to avoid getting too broad when it comes to things like new features.
+Although this is a tool primarily designed for my own use I'm happy to hear and consider
+feedback, even though I'll likely try to avoid getting too broad when it comes to things
+like new features. Feel free to file issues if you need help and/or have suggestions!

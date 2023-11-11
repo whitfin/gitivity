@@ -13,9 +13,7 @@ jobs:
     strategy:
       matrix:
         os:
-          - macox-latest
           - ubuntu-latest
-          - windows-latest
         node:
           - 20.x
     steps:

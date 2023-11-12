@@ -9,17 +9,17 @@ module.exports = {
     command: ['import <target>'],
 
     // command description text for the CLI
-    describe: 'Imports a sorted array of commit activity.',
+    describe: 'Imports a sorted array of activity.',
 
     // command argument builder
     builder: function build(args) {
         return args
-            .describe('author', 'Customize the author name and email being attached to each commit.')
-            .describe('branch', 'Customize the branch name commits are assigned to in the repo.')
+            .positional('target', {})
+            .describe('author', 'Author name and email being attached to each commit.')
+            .describe('branch', 'Branch name commits are assigned to in the repo.')
             .default('branch', 'main')
             .alias('author', 'a')
-            .alias('branch', 'b')
-            .require('target');
+            .alias('branch', 'b');
     },
 
     // command handler definition

@@ -43,7 +43,7 @@ module.exports = async function fetch(args) {
         // walk all user events
         for (let event of events) {
             let action = {
-                id: event.id,
+                id: `${event.id}`,
                 author,
                 timestamp: moment.utc(event.created_at)
             };

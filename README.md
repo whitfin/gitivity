@@ -1,4 +1,4 @@
-# gitlab-activity-mirror
+# Gitivity
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/whitfin/gitivity/ci.yml?branch=main)](https://github.com/whitfin/gitivity/actions) [![Published Version](https://img.shields.io/npm/v/gitivity.svg)](https://npmjs.com/package/gitivity) [![Published Downloads](https://img.shields.io/npm/dt/gitivity)](https://npmjs.com/package/gitivity)
 

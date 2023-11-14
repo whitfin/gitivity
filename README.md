@@ -31,7 +31,12 @@ commits for newly exported commits.
 
 ## Migrating Activity
 
-You can install `gitivity` from either this repository, or from `npm`.
+You can install `gitivity` from either this repository, or from `npm`:
+
+```
+npm i -g gitivity
+npm i -g whitfin/gitivity
+```
 
 Using `gitivity` from the CLI is simple:
 

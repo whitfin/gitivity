@@ -65,6 +65,8 @@ module.exports = async function fetch(args) {
                     let date = moment.utc(day.date);
                     let action = {
                         id: `${date.valueOf()}${i}`,
+                        name: user.name,
+                        email: user.email,
                         author,
                         timestamp: date
                     };

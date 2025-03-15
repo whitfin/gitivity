@@ -44,6 +44,8 @@ module.exports = async function fetch(args) {
         for (let event of events) {
             let action = {
                 id: `${event.id}`,
+                name: user.name,
+                email: user.email,
                 author,
                 timestamp: moment.utc(event.created_at)
             };

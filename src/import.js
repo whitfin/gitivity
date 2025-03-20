@@ -1,4 +1,5 @@
-const readline = require('readline');
+const fs = require('fs');
+const path = require('path');
 const mkdirp = require('mkdirp').mkdirp;
 
 const Git = require('simple-git');
@@ -6,7 +7,7 @@ const Git = require('simple-git');
 module.exports = {
 
     // command usage text
-    command: ['import <target>'],
+    command: ['import <target> [exportedFile]'],
 
     // command description text for the CLI
     describe: 'Imports a sorted array of activity.',
@@ -15,6 +16,9 @@ module.exports = {
     builder: function build(args) {
         return args
             .positional('target', {})
+            .positional('exportedFile', {
+                default: 'export.jsonl'
+            })
             .describe('author', 'Author name and email being attached to each commit.')
             .describe('branch', 'Branch name commits are assigned to in the repo.')
             .default('branch', 'main')
@@ -46,14 +50,20 @@ module.exports = {
             // no commits yet
         }
 
-        // open our read stream from stdin
-        let stream = readline.createInterface({
-            input: process.stdin,
-            crlfDelay: Infinity
-        });
+        let lines = [];
+        const jsonlFilePath = path.join(__dirname, '..', args.exportedFile);
+        console.log('Importing git activity from:', jsonlFilePath);
+        if (fs.existsSync(jsonlFilePath)) { 
+            let fileContent = fs.readFileSync(jsonlFilePath, 'utf-8').trim();
+            lines = fileContent.split('\n');
+            console.log('Number of lines:', lines.length);
+        } else {
+            console.error('File does not exist: ', jsonlFilePath);
+            return;
+        }
 
         // process each line of input
-        for await (let line of stream) {
+        for await (let line of lines) {
             // pull author and commit char
             let action = JSON.parse(line);
             let author = args.author || action.author;

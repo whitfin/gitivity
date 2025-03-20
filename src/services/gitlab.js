@@ -37,7 +37,8 @@ module.exports = async function fetch(args) {
     for (let type of enabled) {
         // walk the events of the user matching the entry type
         let events = await client.Users.allEvents(user.id, {
-            action: type
+            action: type,
+            after: args.date
         });
 
         // walk all user events

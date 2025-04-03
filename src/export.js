@@ -1,8 +1,5 @@
 // service handlers
-let services = {
-    github: require('./services/github'),
-    gitlab: require('./services/gitlab')
-};
+const services = require('./services');
 
 // cmd definition
 module.exports = {
@@ -29,17 +26,13 @@ module.exports = {
 
     // command handler definition
     handler: async function (args) {
-        // pull the actions from the service handler
-        let actions = await services[args.service](args);
+        // allow re-use and stream overriding
+        let stream = args.stream || process.stdout;
 
-        // sort actions by timestamp
-        actions.sort(function (left, right) {
-            return left.timestamp.valueOf() - right.timestamp.valueOf();
-        });
-
-        // write all to stdout
-        for (let action of actions) {
-            console.log(JSON.stringify(action));
+        // read back all actions from the selected service
+        for await (let action of services[args.service](args)) {
+            stream.write(JSON.stringify(action));
+            stream.write('\n');
         }
     }
 };

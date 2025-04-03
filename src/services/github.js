@@ -9,9 +9,7 @@ const Octokit = require('@octokit/rest').Octokit;
  * @returns
  *      an array of actions to emit to stdout.
  */
-module.exports = async function fetch(args) {
-    let actions = [];
-
+module.exports = async function* fetch(args) {
     // open GitHub API cliemt
     let client = new Octokit({
         auth: args.token
@@ -63,19 +61,15 @@ module.exports = async function fetch(args) {
             for (let day of week.contributionDays) {
                 for (let i = 1; i <= day.contributionCount; i++) {
                     let date = moment.utc(day.date);
-                    let action = {
+                    yield {
                         id: `${date.valueOf()}${i}`,
                         name: user.name,
                         email: user.email,
                         author,
                         timestamp: date
                     };
-                    actions.push(action);
                 }
             }
         }
     }
-
-    // done !
-    return actions;
 };

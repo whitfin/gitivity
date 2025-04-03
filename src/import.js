@@ -48,7 +48,7 @@ module.exports = {
 
         // open our read stream from stdin
         let stream = readline.createInterface({
-            input: process.stdin,
+            input: args.stream || process.stdin,
             crlfDelay: Infinity
         });
 

@@ -1,11 +1,11 @@
-// service handlers
-let services = {
-    github: require('../services/github'),
-    gitlab: require('../services/gitlab'),
-};
+import github from '../services/github.js';
+import gitlab from '../services/gitlab.js';
+
+// service handlers for lookup
+const services = { github, gitlab };
 
 // cmd definition
-module.exports = {
+export default {
     // command usage text
     command: 'export <service> <token>',
 

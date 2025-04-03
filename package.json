@@ -14,6 +14,7 @@
     "email": "iw@whitfin.io",
     "url": "http://github.com/whitfin/gitivity/issues"
   },
+  "type": "module",
   "license": "MIT",
   "readmeFilename": "README.md",
   "preferGlobal": true,

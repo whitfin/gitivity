@@ -1,17 +1,17 @@
-const Git = require('simple-git');
-const moment = require('moment');
-const PassThrough = require('stream').PassThrough;
+import Git from 'simple-git';
+import moment from 'moment';
+import { PassThrough } from 'stream';
 
-const exporter = require('./export');
-const importer = require('./import');
+import exporter from './export.js';
+import importer from './import.js';
 
 // cmd definition
-module.exports = {
+export default {
     // command usage text
     command: 'mirror <service> <token> <target>',
 
     // command description text for the CLI
-    describe: 'Mirror activity to a local repository.',
+    describe: 'Mirrors user activity to a Git repo.',
 
     // command argument builder
     builder: function build(args) {

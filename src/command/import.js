@@ -1,9 +1,9 @@
-const readline = require('readline');
-const mkdirp = require('mkdirp').mkdirp;
+import Git from 'simple-git';
+import readline from 'readline';
+import { mkdirp } from 'mkdirp';
 
-const Git = require('simple-git');
-
-module.exports = {
+// cmd definition
+export default {
     // command usage text
     command: ['import <target>'],
 

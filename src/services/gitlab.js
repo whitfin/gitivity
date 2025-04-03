@@ -1,5 +1,5 @@
-const moment = require('moment');
-const Gitlab = require('@gitbeaker/rest').Gitlab;
+import moment from 'moment';
+import { Gitlab } from '@gitbeaker/rest';
 
 /**
  * Export action activity from GitLab.
@@ -9,7 +9,7 @@ const Gitlab = require('@gitbeaker/rest').Gitlab;
  * @returns
  *      an array of actions to emit to stdout.
  */
-module.exports = async function* fetch(args) {
+export default async function* fetch(args) {
     let actions = [];
 
     // open Gitlab API cliemt
@@ -64,4 +64,4 @@ module.exports = async function* fetch(args) {
 
     // yield back
     yield* actions;
-};
+}

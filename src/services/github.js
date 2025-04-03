@@ -1,5 +1,5 @@
-const moment = require('moment');
-const Octokit = require('@octokit/rest').Octokit;
+import moment from 'moment';
+import { Octokit } from '@octokit/rest';
 
 /**
  * Export action activity from GitHub.
@@ -9,7 +9,7 @@ const Octokit = require('@octokit/rest').Octokit;
  * @returns
  *      an array of actions to emit to stdout.
  */
-module.exports = async function* fetch(args) {
+export default async function* fetch(args) {
     // open GitHub API cliemt
     let client = new Octokit({
         auth: args.token,
@@ -72,4 +72,4 @@ module.exports = async function* fetch(args) {
             }
         }
     }
-};
+}

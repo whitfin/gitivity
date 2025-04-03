@@ -1,9 +1,16 @@
 #!/usr/bin/env node
-require('yargs/yargs')(process.argv.slice(2))
+import exporter from '../src/command/export.js';
+import importer from '../src/command/import.js';
+import mirrorer from '../src/command/mirror.js';
+
+import yargs from 'yargs';
+
+yargs(process.argv.slice(2))
     .usage('gitivity <command>')
-    .command(require('../src/command/export'))
-    .command(require('../src/command/import'))
-    .command(require('../src/command/mirror'))
+    .command(exporter)
+    .command(importer)
+    .command(mirrorer)
     .demandCommand()
     .wrap(100)
-    .help().argv;
+    .help()
+    .argv;

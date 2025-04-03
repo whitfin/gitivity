@@ -1,4 +1,3 @@
-// service handlers
 const Git = require('simple-git');
 const moment = require('moment');
 const PassThrough = require('stream').PassThrough;

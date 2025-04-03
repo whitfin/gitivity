@@ -23,20 +23,15 @@ npm i -g gitivity
 npm i -g whitfin/gitivity
 ```
 
-Using `gitivity` from the CLI is simple, with you typically only needing `mirror`:
-
-```bash
-gitivity mirror <service> <token> <target>
-```
-
-For for example, exporting GitLab activity into a new repo inside `my-gitlab-activity`:
+Using `gitivity` from the CLI is simple, with you typically only needing `mirror`. For
+example, to export your GitLab activity into a new repository inside `my-activity`:
 
 ```bash
 gitivity mirror gitlab glpat-_******************* my-gitlab-activity
 ```
 
 You can then create a private GitHub repository and use it as a remote, which will mirror
-the activity to your profile.
+the activity to your profile. This tool will not configure remote repositories for you.
 
 ## Discrete Steps
 

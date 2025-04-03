@@ -27,17 +27,24 @@
     "gitivity": "bin/gitivity"
   },
   "scripts": {
-    "lint": "eslint bin/* src/*.js *.js"
+    "format": "prettier --write bin/* src/**/*",
+    "lint": "prettier --check bin/* src/**/*"
   },
   "dependencies": {
-    "@gitbeaker/rest": "^39.21.2",
-    "@octokit/rest": "^20.0.2",
+    "@gitbeaker/rest": "^42.2.0",
+    "@octokit/rest": "^21.1.1",
     "mkdirp": "^3.0.1",
-    "moment": "^2.29.4",
-    "simple-git": "^3.20.0",
+    "moment": "^2.30.1",
+    "simple-git": "^3.27.0",
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "eslint": "^8.53.0"
+    "prettier": "^3.5.3"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 100,
+    "tabWidth": 4,
+    "semi": true
   }
 }

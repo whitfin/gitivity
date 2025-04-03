@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 require('yargs/yargs')(process.argv.slice(2))
     .usage('gitivity <command>')
-    .command(require('../src/export'))
-    .command(require('../src/import'))
+    .command(require('../src/command/export'))
+    .command(require('../src/command/import'))
+    .command(require('../src/command/mirror'))
     .demandCommand()
-    .help()
-    .argv;
+    .wrap(100)
+    .help().argv;

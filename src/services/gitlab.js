@@ -14,7 +14,7 @@ module.exports = async function* fetch(args) {
 
     // open Gitlab API cliemt
     let client = new Gitlab({
-        token: args.token
+        token: args.token,
     });
 
     // fetch current user metadata for author tag
@@ -30,27 +30,30 @@ module.exports = async function* fetch(args) {
         'merged',
         'pushed',
         'reopened',
-        'updated'
+        'updated',
     ];
 
     // walk all enabled types
     for (let type of enabled) {
-        // walk the events of the user matching the entry type
-        let events = await client.Users.allEvents(user.id, {
+        // params
+        let opts = {
             action: type,
-            after: args.date
-        });
+        };
 
-        // walk all user events
-        for (let event of events) {
-            let action = {
+        // lower bounds
+        if (args.from) {
+            opts.after = moment.utc(opts.after).format('YYYY-MM-DD');
+        }
+
+        // walk the events of the user matching the entry type
+        for (let event of await client.Users.allEvents(user.id, opts)) {
+            actions.push({
                 id: `${event.id}`,
                 name: user.name,
                 email: user.email,
                 author,
-                timestamp: moment.utc(event.created_at)
-            };
-            actions.push(action);
+                timestamp: moment.utc(event.created_at),
+            });
         }
     }
 

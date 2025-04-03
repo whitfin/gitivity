@@ -1,0 +1,11 @@
+{
+  "saveAndRun": {
+    "commands": [
+      {
+        "silent": true,
+        "match": ".*\\.js$",
+        "cmd": "npx prettier --write ${file}"
+      }
+    ]
+  }
+}

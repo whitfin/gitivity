@@ -1,13 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+const readline = require('readline');
 const mkdirp = require('mkdirp').mkdirp;
 
 const Git = require('simple-git');
 
 module.exports = {
-
     // command usage text
-    command: ['import <target> [exportedFile]'],
+    command: ['import <target>'],
 
     // command description text for the CLI
     describe: 'Imports a sorted array of activity.',
@@ -15,15 +13,18 @@ module.exports = {
     // command argument builder
     builder: function build(args) {
         return args
-            .positional('target', {})
-            .positional('exportedFile', {
-                default: 'export.jsonl'
+            .positional('target', {
+                describe: 'The location of the targeted repository on disk.',
             })
-            .describe('author', 'Author name and email being attached to each commit.')
-            .describe('branch', 'Branch name commits are assigned to in the repo.')
-            .default('branch', 'main')
-            .alias('author', 'a')
-            .alias('branch', 'b');
+            .option('author', {
+                alias: 'a',
+                description: 'Author name and email being attached to each commit.',
+            })
+            .option('branch', {
+                alias: 'b',
+                default: 'main',
+                description: 'Branch name commits are assigned to in the repo.',
+            });
     },
 
     // command handler definition
@@ -32,8 +33,8 @@ module.exports = {
         await mkdirp(args.target);
         process.chdir(args.target);
 
-        // init git repo
-        let git = Git();
+        // init git repo as needed
+        let git = args.git || new Git();
         await git.init(false, ['-b', args.branch]);
 
         // duplicate filter
@@ -50,20 +51,14 @@ module.exports = {
             // no commits yet
         }
 
-        let lines = [];
-        const jsonlFilePath = path.join(__dirname, '..', args.exportedFile);
-        console.log('Importing git activity from:', jsonlFilePath);
-        if (fs.existsSync(jsonlFilePath)) { 
-            let fileContent = fs.readFileSync(jsonlFilePath, 'utf-8').trim();
-            lines = fileContent.split('\n');
-            console.log('Number of lines:', lines.length);
-        } else {
-            console.error('File does not exist: ', jsonlFilePath);
-            return;
-        }
+        // open our read stream from stdin
+        let stream = readline.createInterface({
+            input: args.stream || process.stdin,
+            crlfDelay: Infinity,
+        });
 
         // process each line of input
-        for await (let line of lines) {
+        for await (let line of stream) {
             // pull author and commit char
             let action = JSON.parse(line);
             let author = args.author || action.author;
@@ -82,8 +77,8 @@ module.exports = {
                 '--date',
                 action.timestamp,
                 '--author',
-                author
+                author,
             ]);
         }
-    }
+    },
 };

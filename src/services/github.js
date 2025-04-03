@@ -12,7 +12,7 @@ const Octokit = require('@octokit/rest').Octokit;
 module.exports = async function* fetch(args) {
     // open GitHub API cliemt
     let client = new Octokit({
-        auth: args.token
+        auth: args.token,
     });
 
     // retrieve the current user info
@@ -28,9 +28,7 @@ module.exports = async function* fetch(args) {
     // initialize timestamps
     let user = viewer.viewer;
     let author = `${user.name} <${user.email}>`;
-    // github includes start date activities also which 
-    // we don't want in incremental sync    
-    let created = moment.utc(args.date).add(1, 'days'); 
+    let created = moment.utc(user.createdAt);
     let current = moment.utc();
 
     // walk through all actions (yearly)
@@ -68,7 +66,7 @@ module.exports = async function* fetch(args) {
                         name: user.name,
                         email: user.email,
                         author,
-                        timestamp: date
+                        timestamp: date,
                     };
                 }
             }

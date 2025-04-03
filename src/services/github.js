@@ -28,7 +28,9 @@ module.exports = async function* fetch(args) {
     // initialize timestamps
     let user = viewer.viewer;
     let author = `${user.name} <${user.email}>`;
-    let created = moment.utc(user.createdAt);
+    // github includes start date activities also which 
+    // we don't want in incremental sync    
+    let created = moment.utc(args.date).add(1, 'days'); 
     let current = moment.utc();
 
     // walk through all actions (yearly)

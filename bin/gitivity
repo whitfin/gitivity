@@ -1,9 +1,9 @@
 #!/usr/bin/env node
+import yargs from 'yargs';
+
 import exporter from '../src/command/export.js';
 import importer from '../src/command/import.js';
 import mirrorer from '../src/command/mirror.js';
-
-import yargs from 'yargs';
 
 yargs(process.argv.slice(2))
     .usage('gitivity <command>')

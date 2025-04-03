@@ -14,6 +14,52 @@ make charts match across services. This may not always be possible, so don't exp
 identical charts - but they should generally be pretty close. Please also keep in mind that
 their definitions of activity can change at any point, but I'll do my best to keep up!
 
+## Getting Started
+
+You can install `gitivity` from either this repository, or from `npm`:
+
+```bash
+npm i -g gitivity
+npm i -g whitfin/gitivity
+```
+
+Using `gitivity` from the CLI is simple, with you typically only needing `mirror`:
+
+```bash
+gitivity mirror <service> <token> <target>
+```
+
+For for example, exporting GitLab activity into a new repo inside `my-gitlab-activity`:
+
+```bash
+gitivity mirror gitlab glpat-_******************* my-gitlab-activity
+```
+
+You can then create a private GitHub repository and use it as a remote, which will mirror
+the activity to your profile.
+
+## Discrete Steps
+
+If you would prefer to do this as discrete steps, you can use the `export` and `import`
+commands directly. The `mirror` command is simply a convenient chain of these commands:
+
+```bash
+gitivity export <service> <token>
+gitivity import <target>
+```
+
+Both of these commands work via `stdio` so you can pipe between them, or buffer to files
+as an interim:
+
+```bash
+gitivity export gitlab glpat-_******************* > export.jsonl
+gitivity import my-gitlab-activity < export.jsonl
+```
+
+The main difference with this approach is that `export` lacks the context of the output
+repository. The `mirror` command has this context, and so we can use the latest commit
+time from the repository to support incremental exports.
+
 ## How It Works
 
 The idea here is pretty simple. You first export your commit data from a service (e.g. GitLab)
@@ -28,51 +74,6 @@ If you have a lot of commits, it **will** take a long time to run initially. Mak
 commit takes about 25ms (on my machine), so expect a few minutes if you're porting over
 thousands of commits. Subsequent runs of this tool will speed up as it will only create
 commits for newly exported commits.
-
-## Migrating Activity
-
-You can install `gitivity` from either this repository, or from `npm`:
-
-```
-npm i -g gitivity
-npm i -g whitfin/gitivity
-```
-
-Using `gitivity` from the CLI is simple, with you typically only needing `mirror`:
-
-```
-gitivity mirror <service> <token> <target>
-```
-
-For for example, invoking via the following:
-
-```
-gitivity mirror gitlab glpat-_******************* my-gitlab-activity
-```
-
-This will export your GitLab activity and create a new repository located inside a new
-directory named `my-gitlab-activity`. You can then create a private GitHub repository
-and use it as a remote, which will mirror the activity to your profile.
-
-If you would prefer to see this as discrete steps, `mirror` is simply a convenient chain
-of two other commands:
-
-```
-gitivity export <service> <token>
-gitivity import <target>
-```
-
-Both of these commands work via `stdio` so you can pipe between them, or buffer to files
-as an interim:
-
-```
-gitivity export gitlab glpat-_******************* > export.jsonl
-gitivity import my-gitlab-activity < export.jsonl
-```
-
-The advantage of using `mirror` is the context of the repository during export; we can
-use the latest commit time of the repository to enable incremental export (making it
-faster).
 
 ## Help & Issues
 

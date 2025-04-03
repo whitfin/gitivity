@@ -1,6 +1,6 @@
 {
   "name": "gitivity",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A dumb utility to help you mirror your GitLab and GitHub contributions.",
   "author": {
     "name": "Isaac Whitfield",

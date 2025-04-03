@@ -44,16 +44,16 @@ gitivity import <target>
 ```
 
 Both of these commands work via `stdio` so you can pipe between them, or buffer to files
-as an interim:
+as an interim. This allows you to inspect the exported activity before import:
 
 ```bash
 gitivity export gitlab glpat-_******************* > export.jsonl
 gitivity import my-gitlab-activity < export.jsonl
 ```
 
-The main difference with this approach is that `export` lacks the context of the output
-repository. The `mirror` command has this context, and so we can use the latest commit
-time from the repository to support incremental exports.
+The main difference with this approach is that because the `mirror` command has context
+of the output repository, it can use the latest commit timestamp to enable incremental
+exports.
 
 ## How It Works
 

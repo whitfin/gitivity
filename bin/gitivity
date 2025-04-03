@@ -13,4 +13,4 @@ yargs(process.argv.slice(2))
     .demandCommand()
     .wrap(100)
     .help()
-    .argv;
+    .parse();

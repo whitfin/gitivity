@@ -2,10 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 // service handlers
-let services = {
-    github: require('./services/github'),
-    gitlab: require('./services/gitlab')
-};
+const services = require('./services');
 
 function cleanUpFileAndExtractLastSyncDate(filePath) {
     let lastSyncDate = null;

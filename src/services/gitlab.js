@@ -9,7 +9,7 @@ const Gitlab = require('@gitbeaker/rest').Gitlab;
  * @returns
  *      an array of actions to emit to stdout.
  */
-module.exports = async function fetch(args) {
+module.exports = async function* fetch(args) {
     let actions = [];
 
     // open Gitlab API cliemt
@@ -54,6 +54,11 @@ module.exports = async function fetch(args) {
         }
     }
 
-    // return the shortened action format
-    return actions;
+    // sort actions by timestamp
+    actions.sort(function (left, right) {
+        return left.timestamp.valueOf() - right.timestamp.valueOf();
+    });
+
+    // yield back
+    yield* actions;
 };
